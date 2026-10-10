@@ -346,7 +346,7 @@ def process_sub_points(message):
         p = message.text.split()
         cursor.execute("UPDATE users SET points = points - ? WHERE user_id = ?", (int(p[1]), int(p[0])))
         conn.commit()
-        bot.reply_to(message, "✅ تم الخصم بنجاح.")
+        bot.reply_to(message, "✅ تم الخصم بنجاح.
     except Exception: bot.reply_to(message, "❌ خطأ في الصيغة.")
 
 def process_broadcast(message):
@@ -356,11 +356,10 @@ def process_broadcast(message):
 
 HTML_TEMPLATE = """<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><title>FURY SYSTEM V3</title>
 <style>body{background:#0f172a;color:#f8fafc;font-family:Tahoma;text-align:center;padding:20px}.container{max-width:400px;margin:40px auto;background:#1e293b;padding:25px;border-radius:15px}input{width:90%;padding:12px;margin:15px 0;border-radius:8px;border:1px solid #475569;background:#0f172a;color:#fff;text-align:center}button{background:#22c55e;color:#fff;border:none;padding:12px;border-radius:8px;width:100%;font-weight:bold;cursor:pointer}.error{color:#ef4444;font-weight:bold}.success{color:#22c55e;font-size:20px;font-weight:bold;background:#0f172a;padding:15px;border-radius:8px;border:1px dashed #22c55e}</style></head>
-<body><div class="container"><h2>🔥 نظام التحقق (V3)</h2>
+<body><div class="container"><h2>نظام التحقق (V3)</h2>
 {% if error %}<p class="error">{{ error }}</p>{% elif code %}<p>الكود الخاص بك:</p><div class="success">{{ code }}</div>{% else %}
 <form method=HTML_TEMPLATE = """<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><title>FURY SYSTEM V3</title>
-<style>body{background:#0f172a;color:#f8fafc;font-family:Tahoma;text-align:center;padding:20px}.container{max-width:400px;margin:40px auto;background:#1e293b;padding:25px;border-radius:15px}input{width:90%;padding:12px;margin:15px 0;border-radius:8px;border:1px solid #475569;background:#0f172a;color:#fff;text-align:center}button{background:#22c55e;color:#fff;border:none;padding:12px;border-radius:8px;width:100%;font-weight:bold;cursor:pointer}.error{color:#ef4444;font-weight:bold}.success{color:#22c55e;font-size:20px;font-weight:bold;background:#0f172a;padding:15px;border-radius:8px;border:1px dashed #22c55e}</style></head>
-<body><div class="container"><h2>🔥 نظام التحقق (V3)</h2>
+<style>body{background:#0f172a;color:#f8fafc;font-family:Tahoma;text-align:center;padding:20px}.container{max-width:400px;margin:40px auto;background:#1e293b;padding:25px;border-radius:15px}input{width:90%;padding:12px;margin:15px 0;border-radius:8px;border:1px solid #475569;background:#0f172a;color:#fff;text-align:center}button{background:#22c55e;color:#fff;border:none;padding:12px;border-radius:8px;width:100%;font-weight:bold;cursor:pointer}.error{color:#ef4444;font-weight:bold}.success{color:#22c55e;font-size:20px;font-weight:bold;background:#0f172a;padding:15px;border-radius:8px;border:1px dashed #22c55e}</style></head><body><div class="container"><h2>🔥 نظام التحقق (V3)</h2>
 {% if error %}<p class="error">{{ error }}</p>{% elif code %}<p>الكود الخاص بك:</p><div class="success">{{ code }}</div>{% else %}
 <form method="POST"><input type="number" name="telegram_id" placeholder="أدخل ايدي حسابك داخل البوت للتحقق منك" required><button type="submit">إرسال</button></form>{% endif %}</div></body></html>"""
 

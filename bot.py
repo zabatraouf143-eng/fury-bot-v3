@@ -358,5 +358,34 @@ HTML_TEMPLATE = """<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset=
 <style>body{background:#0f172a;color:#f8fafc;font-family:Tahoma;text-align:center;padding:20px}.container{max-width:400px;margin:40px auto;background:#1e293b;padding:25px;border-radius:15px}input{width:90%;padding:12px;margin:15px 0;border-radius:8px;border:1px solid #475569;background:#0f172a;color:#fff;text-align:center}button{background:#22c55e;color:#fff;border:none;padding:12px;border-radius:8px;width:100%;font-weight:bold;cursor:pointer}.error{color:#ef4444;font-weight:bold}.success{color:#22c55e;font-size:20px;font-weight:bold;background:#0f172a;padding:15px;border-radius:8px;border:1px dashed #22c55e}</style></head>
 <body><div class="container"><h2>🔥 نظام التحقق (V3)</h2>
 {% if error %}<p class="error">{{ error }}</p>{% elif code %}<p>الكود الخاص بك:</p><div class="success">{{ code }}</div>{% else %}
+<form method=HTML_TEMPLATE = """<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><title>FURY SYSTEM V3</title>
+<style>body{background:#0f172a;color:#f8fafc;font-family:Tahoma;text-align:center;padding:20px}.container{max-width:400px;margin:40px auto;background:#1e293b;padding:25px;border-radius:15px}input{width:90%;padding:12px;margin:15px 0;border-radius:8px;border:1px solid #475569;background:#0f172a;color:#fff;text-align:center}button{background:#22c55e;color:#fff;border:none;padding:12px;border-radius:8px;width:100%;font-weight:bold;cursor:pointer}.error{color:#ef4444;font-weight:bold}.success{color:#22c55e;font-size:20px;font-weight:bold;background:#0f172a;padding:15px;border-radius:8px;border:1px dashed #22c55e}</style></head>
+<body><div class="container"><h2>🔥 نظام التحقق (V3)</h2>
+{% if error %}<p class="error">{{ error }}</p>{% elif code %}<p>الكود الخاص بك:</p><div class="success">{{ code }}</div>{% else %}
 <form method="POST"><input type="number" name="telegram_id" placeholder="أدخل ايدي حسابك داخل البوت للتحقق منك" required><button type="submit">إرسال</button></form>{% endif %}</div></body></html>"""
+
+@app.route("/", methods=["GET", "POST"])
+def verify_page():
+    token = request.args.get("token")
+    if not token: return render_template_string(HTML_TEMPLATE, error="❌ خطأ: رابط غير صالح!")
+    row = cursor.execute("SELECT user_id, button_id, is_used, expires_at FROM secure_tokens WHERE token = ?", (token,)).fetchone()
+    if not row or row[2] == 1 or time.time() > row[3]: return render_template_string(HTML_TEMPLATE, error="❌ الرابط منتهي أو مستهلك!")
+    
+    if request.method == "POST":
+        if str(row[0]) != str(request.form.get("telegram_id")): return render_template_string(HTML_TEMPLATE, error="❌ الآيدي غير مطابق!")
+        code = "".join(random.choices(string.ascii_uppercase + string.digits, k=12))
+        cursor.execute("UPDATE secure_tokens SET generated_code = ? WHERE token = ?", (code, token))
+        conn.commit()
+        return render_template_string(HTML_TEMPLATE, code=code)
+    return render_template_string(HTML_TEMPLATE)
+
+def run_flask():
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port, debug=False, use_reloader=False)
+
+# تشغيل البوت في الخلفية عند بداية الخدمة
+threading.Thread(target=lambda: bot.infinity_polling(timeout=60, long_polling_timeout=60), daemon=True).start()
+
+if __name__ == "__main__":
+    run_flask()
 

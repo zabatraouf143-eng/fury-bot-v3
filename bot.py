@@ -5,7 +5,7 @@ import subprocess
 from PIL import Image, ImageOps
 import telebot
 
-BOT_TOKEN = os.getenv("BOT_TOKEN", "YOUR_BOT_TOKEN")
+BOT_TOKEN = os.getenv("BOT_TOKEN", "8765104365:AAHYYl2QIDBgkgRR6bXTXJIuH-Vr4dT5I_k")
 bot = telebot.TeleBot(BOT_TOKEN)
 
 KEYSTORE_PATH = "release.keystore"
